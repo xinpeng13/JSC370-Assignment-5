@@ -1,0 +1,101 @@
+---
+title: "Assignment 5"
+author: "Xinpeng Shan"
+date: "2022/4/2"
+output: html_document
+---
+
+## Interactive Visuals
+
+Here are some interactive visualizations to display the informations in the dataset in a flexable way.
+
+```{r, message = FALSE, echo=FALSE, warning=FALSE }
+
+library(data.table)
+library(tidyverse)
+library(plotly)
+library(knitr)
+library(widgetframe)
+
+knitr::opts_chunk$set(include=FALSE, warning = FALSE)
+```
+
+
+```{r }
+data <- read.csv("insurance.csv")
+```
+
+## Figure 1
+
+To see how does insurance charges differ for people who do or do not smoke, I created the figure below. We can notice that insurance charges that the insurance companies pay is higher across all ages for people who are smokers.
+
+
+```{r include=T, echo=F}
+p1<- ggplot(data, aes(x=age, y=charges, col = smoker))+geom_line() + theme_minimal() + scale_colour_brewer()+ labs(title="Insurance Charges verses Age by Smoker")
+
+ggplotly(p1)
+```
+
+
+
+
+```{r }
+newdata <- data %>% na.omit() %>%
+  group_by(region,  age) %>%
+  summarise(charges = mean(charges))
+
+#newdata %>% 
+#  plot_ly(x=~age, y=~region, type="scatter", mode = "markers", color= ~charges, size=~charges, sizes = c(5, 70), #marker=list(sizemode="diameter", opacity=0.5)) 
+```
+
+## Figure 2
+
+In the midterm assignment, I didn't find region to be a crucial factor on predicting the amount of insurance charges, so I wonder does people in different regions have similar amount of insurance charges covered by the insurance company. From the heatmap below, we can notice that in southeast and northeast region, people who are around 20 years old have large insurance charges covered compare with people at the same age in southwest and northwest regions. Also, the heatmap support my founding that people with higher ages tend to have larger insurance charges covered by insurance companies. 
+
+```{r include=T, echo=F}
+p<- ggplot(newdata, aes(age,region))+
+  geom_raster(aes(fill=charges))+
+  labs(title = "Mean Insurance charges for people in different region and age")+
+  scale_fill_gradient(low="darkblue",high="yellow") + theme_minimal()
+
+ggplotly(p)
+#plot_ly(x=colnames(newdata2), y=rownames(newdata2), z=~newdata2, type="heatmap")
+
+
+```
+```{r}
+newdata2 <- data %>% na.omit() %>%
+  group_by(age,  children) %>%
+  summarise(charges = mean(charges))
+
+```
+
+## Figure 3
+
+To visualize how does the number of children people affect the amount of insurance charges covered, I created the scatterplot below with age as x-axis and number of children as y-axis. From the plot, we can notice that people who have 1 to 4 children have larger insurance charges covered compare to people who do not have children. Overall, people with children have larger amount of insurance charges covered.
+
+
+```{r include=T, echo=F, warning=F}
+
+newdata2 %>% 
+  plot_ly(x=~age, y=~children, type="scatter", mode = "markers", color= ~charges, size=~charges, sizes = c(5, 70), marker=list(sizemode="diameter", opacity=0.5))%>%
+  layout(title = 'Insurance charges for people with different number of children and age')
+```
+
+```{r}
+#data$children <- as.factor(data$children)
+#p2<- ggplot(data, aes(x=age, y=charges, col = children))+geom_line() 
+
+#ggplotly(p2)
+```
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,12 @@
+---
+title: "JSC370 Assignment 5"
+author: "Xinpeng Shan"
+output: 
+    html_document:
+        toc: TRUE
+        toc_float: TRUE
+---
+
+## Assignment Description
+
+As medical treatment becomes more costly during global pandemic, it becomes more difficult for people to cover medical bills. In this assignment, I will create 3 interactive visualizations to showcase the relationship between different factors and the insurance costs that will be covered by the insurance company.
